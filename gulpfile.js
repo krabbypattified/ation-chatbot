@@ -25,7 +25,7 @@ gulp.src('assets/styl/main.styl')
 /* Kit
 ===================*/
 gulp.task('kit', function () {
-gulp.src('assets/pages/**/*.kit')
+gulp.src('pages/**/*.kit')
     .pipe(plumber(plumberOptions))
     .pipe(kit())
     .pipe(gulp.dest('build'))
@@ -50,8 +50,8 @@ gulp.task('browser-sync', function () {
 /* Watch
 ===================*/
 gulp.task('watch', function () {
-  gulp.watch('assets/**/*.styl', ['styles']);
-  gulp.watch('assets/**/*.kit', ['kit']);
+  gulp.watch(['pages/**/*.styl', 'components/**/*.styl'], ['styles']);
+  gulp.watch(['pages/**/*.kit', 'components/**/*.kit'], ['kit']);
   gulp.watch('assets/js/**/*.js', ['scripts']);
 });
 

@@ -1,1 +1,1 @@
-document.write('Hello from main.js!');
+// document.body.style.backgroundColor = "lightblue";
