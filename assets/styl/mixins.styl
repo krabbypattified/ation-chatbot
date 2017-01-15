@@ -1,0 +1,21 @@
+// Mixins
+
+// box-shadow()
+//   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
+
+below($width)
+  $width = $width - 1
+  media = 'all and (max-width: %s)' % $width
+  @media media
+    {block}
+
+above($width)
+  media = 'all and (min-width: %s)' % $width
+  @media media
+    {block}
+
+between($min-width, $max-width)
+  $max-width = $max-width - 1
+  media = 'all and (min-width: %s) and (max-width: %s)' % ($min-width $max-width)
+  @media media
+    {block}
