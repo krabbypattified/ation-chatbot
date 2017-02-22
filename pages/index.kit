@@ -15,7 +15,19 @@
 </div>
 <script>
   var load = document.querySelector('div.load');
-  load.addEventListener('webkitAnimationEnd',function( event ) { load.style.display = 'none'; }, false);
+  var loaded = false;
+  load.addEventListener('webkitAnimationEnd',function( event ) {
+    load.style.display = 'none';
+    if (!loaded) {
+      initializeChat({
+        initialNode: test,
+        selector: '.chatbot',
+        before: '<div class="box">',
+        after: '</div>'
+      });
+      loaded = true;
+    }
+  }, false);
 </script>
 
 <!-- People -->
@@ -77,6 +89,6 @@
 </div>
 
 
-<script src=../assets/js/main.js></script>
+<script src=bundle.js></script>
 </body>
 </html>

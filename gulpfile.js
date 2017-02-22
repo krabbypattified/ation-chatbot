@@ -1,6 +1,7 @@
 /* Requires
 ===================*/
 var gulp         = require('gulp'),
+    concat       = require('gulp-concat'),
     stylus       = require('gulp-stylus'),
     autoprefixer = require('gulp-autoprefixer'),
     kit          = require('gulp-kit'),
@@ -14,30 +15,35 @@ var gulp         = require('gulp'),
 /* Styles
 ===================*/
 gulp.task('styles', function () {
-gulp.src('assets/styl/main.styl')
-    .pipe(plumber(plumberOptions))
-    .pipe(stylus())
-    .pipe(autoprefixer(autoprefixerOptions))
-    .pipe(gulp.dest('assets/css'))
-    .pipe(reload({stream:true}));
+  return gulp.src('assets/styl/main.styl')
+  .pipe(plumber(plumberOptions))
+  .pipe(stylus())
+  .pipe(autoprefixer(autoprefixerOptions))
+  .pipe(gulp.dest('assets/css'))
+  .pipe(reload({stream:true}));
 });
 
 /* Kit
 ===================*/
 gulp.task('kit', function () {
-gulp.src('pages/**/*.kit')
-    .pipe(plumber(plumberOptions))
-    .pipe(kit())
-    .pipe(gulp.dest('build'))
-    .pipe(reload({stream:true}));
+  return gulp.src('pages/**/*.kit')
+  .pipe(plumber(plumberOptions))
+  .pipe(kit())
+  .pipe(gulp.dest('build'))
+  .pipe(reload({stream:true}));
 });
 
 /* Scripts
 ===================*/
 gulp.task('scripts', function () {
-gulp.src('assets/js/**/*.js')
-    .pipe(gulp.dest('build'))
-    .pipe(reload({stream:true}));
+  return gulp.src([
+    'assets/js/data.js',
+    'assets/js/chat.js',
+    'assets/js/main.js'
+  ])
+  .pipe(concat('bundle.js'))
+  .pipe(gulp.dest('build'))
+  .pipe(reload({stream:true}));
 });
 
 
@@ -84,4 +90,4 @@ var browserSyncOptions = {
 
 /* Default
 ===================*/
-gulp.task('default', ['styles', 'kit', 'browser-sync', 'watch']);
+gulp.task('default', ['styles', 'kit', 'scripts', 'browser-sync', 'watch']);
