@@ -1,18 +1,24 @@
-::-webkit-scrollbar
-  width 12px
-  height 12px
-
-::-webkit-scrollbar-thumb
-  border 6px solid #ddd
-  border-radius 6px
-
-::-webkit-scrollbar-track
-  border 6px solid white
-  border-radius 6px
-
 body, html
   margin 0
   padding 0
 
 *
   box-sizing border-box
+
+input
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+  outline none
+  border none
+  font inherit
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+
+button,
+input { /* 1 */
+  overflow: visible;
+}

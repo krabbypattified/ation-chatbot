@@ -1,0 +1,81 @@
+// Chatbot
+.chatbot
+  padding 3rem
+  padding-bottom 1rem
+  display flex
+  align-items flex-start
+  flex-direction column
+  margin 0 auto
+  min-height 200px
+  max-width 70em
+  min-height
+  overflow-x hidden
+
+  .box
+    background-color white
+    padding .8rem 1rem
+    box-shadow 0px 1px 1px rgba(0,0,0,0.2)
+    border-radius 3px
+    display inline
+    font-size 1.2em
+    margin-bottom 1em
+
+    opacity 0
+    animation-name fadeInRight
+    animation-duration 500ms
+    animation-fill-mode forwards
+
+    img
+      display block
+      max-width 600px
+      max-height 400px
+      +below(600px)
+        max-width 100%
+
+
+// Reply
+.reply
+  padding 2em
+  display flex
+  align-items center
+  justify-content center
+  flex-wrap wrap
+  min-height 122px
+
+  .box
+    @extend .chatbot .box
+    background-color lighten(orange,5%)
+    color white
+    cursor pointer
+    margin .5em 1em
+    opacity 0
+    user-select none
+    padding 1rem 1.5rem
+    font-size 1.1em
+
+    &:hover
+      background-color #4caf50
+      transition all .06s
+    &:active
+      background-color darken(#4caf50,10%)
+
+    animation-name fadeInUp
+    animation-duration 400ms
+    // delay should be >= time between first & last response insert
+    animation-delay 400ms
+    animation-fill-mode forwards
+
+  .input
+    cursor auto
+    &:hover
+      background-color lighten(orange,5%)
+      transition none
+    &:active
+      background-color lighten(orange,5%)
+
+    input
+      background-color lighten(orange,5%)
+      color white
+      // min-width 300px
+      &::placeholder
+        color lighten(orange,80%)

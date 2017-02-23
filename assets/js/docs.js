@@ -1,36 +1,32 @@
 /*
-initializeChat(); // looks for config object or INITIAL_NODE
 initializeChat({
-  initialNode: test,
-  selector: '.chatbot',
+    initialNode: 'demoNode', // if it's an array, then it's random
+    chatBox: '.chatbot',
+    choiceBox: '.replies',
+    delay: 1300,
+    beforeSpeech: '<div>',
+    afterSpeech: '</div>',
+    beforeChoice: '<div>',
+    afterChoice: '</div>'
 });
 
-// Initial Node
-const INITIAL_NODE = myNode;
-// const INITIAL_NODE = myRandomNodeSet;
-
-// Random text set
+// Feel free to use RANDOM here
+const demoRandomSpeech = [RANDOM, 'Hi there!', 'Hola!', 'Welcome to -ATION', 'Welcome back!'];
 const greetings = ['Hi there!', 'Hola!', 'Welcome to -ATION', 'Welcome back!'];
+const randomNodeSet = ['nodeA', 'nodeB', 'nodeC'];
 
-// Random node set
-const randomNodeSet = [nodeA, nodeB, nodeC];
-
-// Each is a node that has speech and choices
-const myNode = {
-  speech: [
-    greetings,
-    'How may I help you',
-    '<img src=//placehold.it/500>'
-  ],
-  choices: [
-    ['Sure', someNode],
-    ['Nah', [randomNodeA, randomNodeB]],
-    ['Idk', randomNodeSet]
-  ]
+const demoNode = {
+    // Use `RANDOM` as index [0] for random one-liners
+    // speech: [RANDOM, 'This is a demo.', 'This is a chatbot demo.'],
+    speech: [demoRandomSpeech, 'This is a chatbot demo.'],
+    choices: [
+      // Using an array in 'text' or 'next' means pick a random one.
+      {text: 'Yeaa wassup', next: ['demoNode', 'otherNode']},
+      {text: 'Go away', next: 'otherNode'},
+      {text: ['Go away!!', 'Shut up!'], next: {speech: 'Fine. Bye!'}} // you can embed a node if u want
+    ]
 };
 
-// This is the simplest type of node. A node with no choices will end the chat.
-const mySimpleNode = {
-  speech: 'Hi there'
-};
+// Simple example node. A node with no choices will end the chat.
+const otherNode = { speech: 'Hi there' };
 */

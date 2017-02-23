@@ -6,89 +6,23 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="../assets/css/main.css">
+  <script async src=bundle.js></script>
 </head>
 <body>
 
 <!-- Loader -->
-<div class="load">
-  <img class="load" src="http://i.imgur.com/rcrDFHj.png" />
-</div>
-<script>
-  var load = document.querySelector('div.load');
-  var loaded = false;
-  load.addEventListener('webkitAnimationEnd',function( event ) {
-    load.style.display = 'none';
-    if (!loaded) {
-      initializeChat({
-        initialNode: test,
-        selector: '.chatbot',
-        before: '<div class="box">',
-        after: '</div>'
-      });
-      loaded = true;
-    }
-  }, false);
-</script>
+<!-- @import ../components/loader -->
 
+<div class="fold">
 <!-- People -->
-<div class="people">
-    <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 200ms">
-      <p>Joe Schmo</p>
-    </div>
-    <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 250ms">
-      <p>Joe Schmo</p>
-    </div>
-    <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 300ms">
-      <p>Joe Schmo</p>
-    </div>
-    <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 350ms">
-      <p>Joe Schmo</p>
-    </div>
-    <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 400ms">
-      <p>Joe Schmo</p>
-    </div>
-    <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 450ms">
-      <p>Joe Schmo</p>
-    </div>
-    <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 500ms">
-      <p>Joe Schmo</p>
-    </div>
-    <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 550ms">
-      <p>Joe Schmo</p>
-    </div>
-    <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 600ms">
-      <p>Joe Schmo</p>
-    </div>
-    <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 650ms">
-      <p>Joe Schmo</p>
-    </div>
-    <div style="opacity: 0">.</div>
+<!-- @import ../components/people -->
+
+<!-- Chatbot -->
+<!-- @import ../components/chatbot -->
 </div>
 
 <!-- Chatbot -->
-<!-- TODO: animation delay till after page load -->
-<div class="chatbot">
-    <div class="box" style="animation-delay: 1s">Hi there!</div>
-    <!-- <div class="box">Wassup?</div>
-    <div class="box">
-      <img src="http://lorempixel.com/600/200/">
-    </div>
-    <div class="box">
-      <img src="http://lorempixel.com/800/1000/">
-    </div>
-    <div class="box">
-      <a href="//google.com" target="_blank">
-        <img src="http://lorempixel.com/800/1000/">
-      </a>
-    </div> -->
-</div>
+<!-- @import ../components/info -->
 
-<div class="reply">
-  <div class="user box" style="animation-delay: 1500ms">Yea wassup</div>
-  <div class="user box" style="animation-delay: 1600ms">Go away</div>
-</div>
-
-
-<script src=bundle.js></script>
 </body>
 </html>

@@ -6,32 +6,26 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="../assets/css/main.css">
+  <script async src=bundle.js></script>
 </head>
 <body>
 
 <!-- Loader -->
 <div class="load">
-  <img class="load" src="http://i.imgur.com/rcrDFHj.png" />
+  <img class="load" src="assets/img/ation-logo.png" />
 </div>
 <script>
   var load = document.querySelector('div.load');
-  var loaded = false;
   load.addEventListener('webkitAnimationEnd',function( event ) {
     load.style.display = 'none';
-    if (!loaded) {
-      initializeChat({
-        initialNode: test,
-        selector: '.chatbot',
-        before: '<div class="box">',
-        after: '</div>'
-      });
-      loaded = true;
-    }
+    startChat();
   }, false);
 </script>
 
+<div class="fold">
 <!-- People -->
 <div class="people">
+    <!-- <div class="logo" style="background-image: url(assets/img/ation-logo-orange.png);"></div> -->
     <div class="person" style="background-image: url(http://lorempixel.com/350/200/); animation-delay: 200ms">
       <p>Joe Schmo</p>
     </div>
@@ -66,29 +60,45 @@
 </div>
 
 <!-- Chatbot -->
-<!-- TODO: animation delay till after page load -->
 <div class="chatbot">
-    <div class="box" style="animation-delay: 1s">Hi there!</div>
-    <!-- <div class="box">Wassup?</div>
-    <div class="box">
-      <img src="http://lorempixel.com/600/200/">
-    </div>
-    <div class="box">
-      <img src="http://lorempixel.com/800/1000/">
-    </div>
-    <div class="box">
+    <!-- <div class="box">
       <a href="//google.com" target="_blank">
         <img src="http://lorempixel.com/800/1000/">
       </a>
     </div> -->
 </div>
 
-<div class="reply">
-  <div class="user box" style="animation-delay: 1500ms">Yea wassup</div>
-  <div class="user box" style="animation-delay: 1600ms">Go away</div>
+<div class="reply"></div>
 </div>
 
+<!-- Chatbot -->
+<div class="info">
+  <div class="block">
+    <div class="image"><img src="assets/img/themission.png"></div>
+    <div class="text">
+      <h1>The Mission</h1>
+      <span>Our mission is to influence all generations through our values of collaboration, imagination, innovation, creation, and conversation. We engage diverse audiences by communicating with a fresh perspective.</span>
+    </div>
+  </div>
 
-<script src=bundle.js></script>
+  <div class="block">
+    <div class="image"><img src="assets/img/whoweare.png"></div>
+    <div class="text">
+      <h1>Who we Are</h1>
+      <span>We are a team who collaborates to fulfill a desire to create the next big thing. Our team members’ diverse and specialized skill sets allow us to innovate and imagine, producing a unique and effective campaign that will create conversation about your brand.</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="image"><img src="assets/img/whychooseus.png"></div>
+    <div class="text">
+      <h1>Why Choose Us</h1>
+      <span>With sharp minds, diverse skill sets, and fresh perspectives, we specialize in grabbing the attention of the demographic that is hardest to reach, our own. We can establish and promote your brand across a wide variety of media and channels.</span>
+    </div>
+  </div>
+</div>
+
+<div class="contact"><div>CONTACT</div></div>
+
 </body>
 </html>

@@ -2,6 +2,7 @@
 ===================*/
 var gulp         = require('gulp'),
     concat       = require('gulp-concat'),
+    order        = require("gulp-order");
     stylus       = require('gulp-stylus'),
     autoprefixer = require('gulp-autoprefixer'),
     kit          = require('gulp-kit'),
@@ -36,11 +37,13 @@ gulp.task('kit', function () {
 /* Scripts
 ===================*/
 gulp.task('scripts', function () {
-  return gulp.src([
-    'assets/js/data.js',
+  return gulp.src('assets/**/*.js')
+  .pipe(order([
     'assets/js/chat.js',
-    'assets/js/main.js'
-  ])
+    'assets/js/data.js',
+    'assets/js/main.js',
+    'assets/**/*.js'
+  ]))
   .pipe(concat('bundle.js'))
   .pipe(gulp.dest('build'))
   .pipe(reload({stream:true}));
