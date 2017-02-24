@@ -38,54 +38,73 @@ function initializeChat(_config) {
 }
 
 function executeChatNode(_node) {
-    let node = _node.constructor === Array ? random(_node) : _node;
+    let node;
+
+    // Pick a node if random
+    node = _node.constructor === Array ? random(_node) : _node;
+
+    // String to actual node
     node = eval(node);
 
-    // Handle single speech box
-    if (typeof node.speech === 'string') {
-      showSpeech(node.speech)
-    }
+    // Pick a random reply if node.speech = [RANDOM, 'foo', 'bar', 'baz']
+    if (node.speech.constructor === Array && node.speech[0] === RANDOM) node.speech = random(node.speech);
 
-    // Handle random single speech
-    else if (node.speech[0] === RANDOM) {
-      showSpeech(random(node.speech));
-    }
+    // Make sure node.speech is an array
+    if (typeof node.speech === 'string') node.speech = [node.speech];
 
-    // Handle multiple speech boxes
-    else {
-      node.speech.forEach((_text, idx) => {
-        let text = _text.constructor === Array ? random(_text) : _text;
-        setTimeout(() => {showSpeech(text)}, idx * config.delay);
-        setTimeout(() => {scrollChatBot()}, idx * config.delay + 200);
-      });
-    }
+    // TODO: animation delay or timeout here? Timeouts cause browser refresh circle.
 
-    let timeout = config.delay / 2;
-    let responseInterval = 130;
-    let responseDelay = -400; // responseDelay should be minus animation-delay
-    let multipleLines = node.speech.constructor === Array && node.speech[0] !== RANDOM;
+    // Display speech
+    node.speech.forEach((_text, idx) => {
+      let text = _text.constructor === Array ? random(_text) : _text; // Pick a random reply
+      setTimeout(() => {showSpeech(text)}, idx * config.delay);
+      setTimeout(() => {scrollChatBot()}, idx * config.delay + 200);
+    });
 
-    // Show choices for node
-    if (node.choices.constructor === Array) {
+
+    // If there's 1 reply, it should be an array
+    if (Object.prototype.toString.call(node.choices) === "[object Object]")
+      node.choices = [node.choices];
+
+    // Handle timeout
+    let timeout = 400;
+    let responseInterval = 200;
+    let responseDelay = 270 - 400; // responseDelay should be desiredDelay - animation-delay (to avoid jiter)
+    let scrollDelay = 270 + (node.choices.length * responseInterval);
+    // animation-delay 400ms
+
+    // TODO: no timeouts for replies. just animation delays
+
+    // If choices exist
+    if (node.choices !== undefined) {
+
+      // Show choices for node
       node.choices.forEach((choice, idx) => {
 
-          // Handle timeout
-          if (multipleLines) timeout = node.speech.length * config.delay + idx * responseInterval + responseDelay;
-          else timeout = config.delay / 2 + idx * responseInterval + responseDelay;
-          if (timeout < 0) timeout = 0;
+            // Handle timeout
+            let multipleLines = node.speech.constructor === Array && node.speech[0] !== RANDOM;
+            if (multipleLines) timeout = (node.speech.length - 1) * config.delay + (idx * responseInterval) + responseDelay;
+            else timeout = 400 + (idx * responseInterval) + responseDelay;
+            if (timeout < 0) timeout = 0;
 
-          let text = choice.text.constructor === Array ? random(choice.text) : choice.text;
+            // If input, display input
+            if (choice.hasOwnProperty('type') && choice.type === 'input') {
+              setTimeout(() => {showInput(choice.callback, choice.next)}, timeout);
+              if (node.choices.length > 1) console.warn('You\'ve included an input box along with other choices. This may or may not break the app.');
+            }
 
-          setTimeout(() => {showChoice(text, choice.next)}, timeout);
-      });
+            // Else if text, display text
+            else {
+              let text = choice.text.constructor === Array ? random(choice.text) : choice.text;
+              setTimeout(() => {showChoice(text, choice.next)}, timeout);
+            }
+        });
+
     }
 
-    else if (typeof node.choices === 'function') {
-      setTimeout(() => {showInput('blah', node.choices)}, timeout);
-    }
-
-    setTimeout(() => {scrollChatBot()}, timeout);
+    setTimeout(() => {scrollChatBot()}, scrollDelay);
   }
+
 
 
 
@@ -104,28 +123,32 @@ function showSpeech(text) {
 }
 
 function showChoice(text, next) {
-  let textBox = htmlToDOM(config.beforeChoice + text + config.afterChoice);
-  textBox.addEventListener("click", () => {
-    choiceBox.innerHTML = '';
-    executeChatNode(next); // NEXT node
-  });
-  choiceBox.appendChild(textBox);
+    let textBox = htmlToDOM(config.beforeChoice + text + config.afterChoice);
+    // textBox.style.cssText = "color: blue";
+    textBox.addEventListener("click", () => {
+      choiceBox.innerHTML = '';
+      executeChatNode(next); // NEXT node
+    });
+    choiceBox.appendChild(textBox);
 }
 
-function showInput(text, func) {
-  let string = '<input type="text" id="input" placeholder="Type and hit ENTER...">';
-  let textBox = htmlToDOM(config.beforeChoice + string + config.afterChoice);
-  textBox.addEventListener('keyup', () => {
-    if (event.which === 13) { // ENTER key
-      let input = document.getElementById('input');
-      choiceBox.innerHTML = '';
-      func(input.value);
-    }
-  });
-  choiceBox.appendChild(textBox);
-  document.querySelector(config.choiceBox + ' .box').classList.add('input');
-  autosizeInput(document.getElementById('input'), { minWidth: true });
-  document.getElementById('input').focus();
+function showInput(_func, next) {
+    let string = '<input type="text" id="input" placeholder="Type and hit ENTER...">';
+    let textBox = htmlToDOM(config.beforeChoice + string + config.afterChoice);
+    textBox.addEventListener('keyup', () => {
+      if (event.which === 13) { // ENTER key
+        let input = document.getElementById('input');
+        choiceBox.innerHTML = '';
+        executeChatNode(next); // NEXT node
+        let func = typeof _func === 'string' ? eval(_func) : _func;
+        func(input.value); // Execute callback
+      }
+    });
+    choiceBox.appendChild(textBox);
+
+    document.querySelector(config.choiceBox).classList.add('input');
+    autosizeInput(document.getElementById('input'), { minWidth: true });
+    document.getElementById('input').focus();
 }
 
 function htmlToDOM(html) {
@@ -141,23 +164,23 @@ function htmlToDOM(html) {
 }
 
 function scrollChatBot() {
-  let choiceBox = document.querySelector('.reply');
-  let offset = choiceBox.getBoundingClientRect();
-  let offsetTop = offset.top;
+    let choiceBox = document.querySelector('.reply');
+    let offset = choiceBox.getBoundingClientRect();
+    let offsetTop = offset.top;
 
-  let choiceBoxHeight = choiceBox.clientHeight;
+    let choiceBoxHeight = choiceBox.clientHeight;
 
-  let windowHeight = window.innerHeight;
-  let currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    let windowHeight = window.innerHeight;
+    let currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
-  let bottomOfChoiceBox = currentScrollPosition + offsetTop + choiceBoxHeight;
-  let targetScrollPos = bottomOfChoiceBox - windowHeight;
+    let bottomOfChoiceBox = currentScrollPosition + offsetTop + choiceBoxHeight;
+    let targetScrollPos = bottomOfChoiceBox - windowHeight;
 
-  if (currentScrollPosition < targetScrollPos) {
-    window.scroll({
-      top: targetScrollPos,
-      left: 0,
-      behavior: 'smooth'
-    });
-  }
+    if (currentScrollPosition < targetScrollPos) {
+      window.scroll({
+        top: targetScrollPos,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }
 }

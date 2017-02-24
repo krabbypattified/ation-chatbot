@@ -154,27 +154,27 @@ min-height
 .reply .box:active {
   background-color: #449e48;
 }
-.reply .input {
+.reply.input .box {
   cursor: auto;
 }
-.reply .input:hover {
+.reply.input .box:hover {
   background-color: #ff650d;
   transition: none;
 }
-.reply .input:active {
+.reply.input .box:active {
   background-color: #ff650d;
 }
-.reply .input input {
+.reply.input .box input {
   background-color: #ff650d;
   color: #fff;
 }
-.reply .input input::-webkit-input-placeholder {
+.reply.input .box input::-webkit-input-placeholder {
   color: #ffdfcc;
 }
-.reply .input input:-ms-input-placeholder {
+.reply.input .box input:-ms-input-placeholder {
   color: #ffdfcc;
 }
-.reply .input input::placeholder {
+.reply.input .box input::placeholder {
   color: #ffdfcc;
 }
 .info {
@@ -320,6 +320,9 @@ img.load {
   top: 0;
   z-index: 5;
   background: #f8f8f8;
+}
+.people a {
+  color: inherit;
 }
 .people .person {
   background-size: cover;

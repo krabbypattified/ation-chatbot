@@ -6,6 +6,22 @@ function postEmail() {
   console.log('PUT to email database');
 }
 
+const test = {
+  speech: [
+    ['yo', 'hi', 'wassup'],
+    [`I'm ${bot}.`, 'suuuppp'],
+    'May I introduce you to one of our students? He\'s a web developer from Vernon, CT.'
+  ],
+  choices: [
+    {type: 'text', text: 'Sure!', next: {speech: 'fine ill leave'}},
+    {type: 'text', text: 'Sure!', next: {speech: 'fine ill leave'}},
+    {type: 'text', text: 'Sure!', next: {speech: 'fine ill leave'}},
+    {type: 'text', text: 'Sure!', next: {speech: 'fine ill leave'}},
+    {text: 'Maybe someone else.', next: 'meetStudent'},
+    {text: 'No thanks.', next: ['seeProjects', 'whoAreYou', 'pickOne']}
+  ]
+};
+
 const meetStudent = {
   speech: [
     greetings,
@@ -14,8 +30,7 @@ const meetStudent = {
   ],
   choices: [
     {text: 'Sure!', next: 'showStudent'},
-    // {type: 'input', callback: postEmail, next: 'goodbye'},
-    // {text: 'Maybe someone else.', next: 'meetStudent'},
+    {text: 'Maybe someone else.', next: 'meetStudent'},
     {text: 'No thanks.', next: ['seeProjects', 'whoAreYou', 'pickOne']}
   ]
 };
@@ -37,10 +52,7 @@ const seeProjects = {
 
 const email = {
   speech: 'Ok, just leave us your email and we\'ll be sure to share what we came up with!',
-  // TODO: next node to allow conversation to go on [func, 'somenode']
-  choices: function(input) {
-    console.log(input);
-  }
+  choices: {type: 'input', callback: 'postEmail', next: 'goodbye'}
 }
 
 const whoAreYou = {
