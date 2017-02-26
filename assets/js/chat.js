@@ -1,12 +1,18 @@
 // Globals
 let chatBox,
     choiceBox;
+
 const RANDOM = null;
+
+const choicesDelay = 270;
+const delayBetweenChoices = 200;
+const scrollDelay = 200; // buggy if too small
+
 const config = {
     initialNode: 'demoNode',
     chatBox: '.chatbot',
     choiceBox: '.replies',
-    delay: 1300,
+    delay: 1300, // how fast to talk
     beforeSpeech: '<span>',
     afterSpeech: '</span>',
     beforeChoice: '<span>',
@@ -38,6 +44,7 @@ function initializeChat(_config) {
 }
 
 function executeChatNode(_node) {
+
     let node;
 
     // Pick a node if random
@@ -46,64 +53,68 @@ function executeChatNode(_node) {
     // String to actual node
     node = eval(node);
 
+
+    /*============
+       Speech
+    ============*/
+
+
     // Pick a random reply if node.speech = [RANDOM, 'foo', 'bar', 'baz']
     if (node.speech.constructor === Array && node.speech[0] === RANDOM) node.speech = random(node.speech);
 
     // Make sure node.speech is an array
     if (typeof node.speech === 'string') node.speech = [node.speech];
 
-    // TODO: animation delay or timeout here? Timeouts cause browser refresh circle.
+    // TODO: Implement animation delay. Maybe listen_once. Timeouts cause browser refresh circle.
 
     // Display speech
     node.speech.forEach((_text, idx) => {
-      let text = _text.constructor === Array ? random(_text) : _text; // Pick a random reply
+      let text = _text.constructor === Array ? random(_text) : _text; // Pick a random text
+      let whenToScrollSpeech = idx * config.delay + scrollDelay;
       setTimeout(() => {showSpeech(text)}, idx * config.delay);
-      setTimeout(() => {scrollChatBot()}, idx * config.delay + 200);
+      setTimeout(() => {scrollChatBot()}, whenToScrollSpeech);
     });
 
+
+    /*============
+       Choices
+    ============*/
+
+    // TODO: Implement listen_once? Implement animation-delay.
 
     // If there's 1 reply, it should be an array
     if (Object.prototype.toString.call(node.choices) === "[object Object]")
       node.choices = [node.choices];
 
-    // Handle timeout
-    let timeout = 400;
-    let responseInterval = 200;
-    let responseDelay = 270 - 400; // responseDelay should be desiredDelay - animation-delay (to avoid jiter)
-    let scrollDelay = 270 + (node.choices.length * responseInterval);
-    // animation-delay 400ms
+    // If no choices exist
+    if (node.choices === undefined) return;
 
-    // TODO: no timeouts for replies. just animation delays
 
-    // If choices exist
-    if (node.choices !== undefined) {
 
-      // Show choices for node
-      node.choices.forEach((choice, idx) => {
+    let whenSpeechIsDone = config.delay * (node.speech.length - 1) + 500/*speech anim-duration*/;
+    let totalDelayBetweenChoices = delayBetweenChoices * (node.choices.length - 1);
+    let whenToScrollChoices = whenSpeechIsDone + choicesDelay +
+    totalDelayBetweenChoices + 400/*choice anim-duration*/ + scrollDelay;
 
-            // Handle timeout
-            let multipleLines = node.speech.constructor === Array && node.speech[0] !== RANDOM;
-            if (multipleLines) timeout = (node.speech.length - 1) * config.delay + (idx * responseInterval) + responseDelay;
-            else timeout = 400 + (idx * responseInterval) + responseDelay;
-            if (timeout < 0) timeout = 0;
+    // Show all choices
+    node.choices.forEach((choice, idx) => {
+        let text = choice.text.constructor === Array ? random(choice.text) : choice.text; // Pick a random text
+        let delay = whenSpeechIsDone + choicesDelay + (delayBetweenChoices * idx);
 
-            // If input, display input
-            if (choice.hasOwnProperty('type') && choice.type === 'input') {
-              setTimeout(() => {showInput(choice.callback, choice.next)}, timeout);
-              if (node.choices.length > 1) console.warn('You\'ve included an input box along with other choices. This may or may not break the app.');
-            }
+        if (choice.hasOwnProperty('type') && choice.type === 'input') {
+          setTimeout(() => { showInput(choice.callback, choice.next) }, delay);
+          if (node.choices.length > 1) console.warn('You\'ve included an input box along with other choices. This may or may not break the app.');
+        }
 
-            // Else if text, display text
-            else {
-              let text = choice.text.constructor === Array ? random(choice.text) : choice.text;
-              setTimeout(() => {showChoice(text, choice.next)}, timeout);
-            }
-        });
+        else {
+          setTimeout(() => { showChoice(text, choice.next) }, delay);
+        }
+    });
 
-    }
+    // Scroll
+    setTimeout(() => {scrollChatBot()}, whenToScrollChoices); //TODO: make sure this works nicely
 
-    setTimeout(() => {scrollChatBot()}, scrollDelay);
-  }
+} /* End executeChatNode */
 
 
 
@@ -117,29 +128,32 @@ function random(_array) {
     return choice;
 }
 
+
 function showSpeech(text) {
     let textBox = htmlToDOM(config.beforeSpeech + text + config.afterSpeech);
     chatBox.appendChild(textBox);
 }
 
-function showChoice(text, next) {
+
+function showChoice(text, next = null) {
     let textBox = htmlToDOM(config.beforeChoice + text + config.afterChoice);
     // textBox.style.cssText = "color: blue";
     textBox.addEventListener("click", () => {
       choiceBox.innerHTML = '';
-      executeChatNode(next); // NEXT node
+      if (next !== null) executeChatNode(next); // NEXT node
     });
     choiceBox.appendChild(textBox);
 }
 
-function showInput(_func, next) {
+
+function showInput(_func, next = null) {
     let string = '<input type="text" id="input" placeholder="Type and hit ENTER...">';
     let textBox = htmlToDOM(config.beforeChoice + string + config.afterChoice);
     textBox.addEventListener('keyup', () => {
       if (event.which === 13) { // ENTER key
         let input = document.getElementById('input');
         choiceBox.innerHTML = '';
-        executeChatNode(next); // NEXT node
+        if (next !== null) executeChatNode(next); // NEXT node
         let func = typeof _func === 'string' ? eval(_func) : _func;
         func(input.value); // Execute callback
       }
@@ -150,6 +164,7 @@ function showInput(_func, next) {
     autosizeInput(document.getElementById('input'), { minWidth: true });
     document.getElementById('input').focus();
 }
+
 
 function htmlToDOM(html) {
     var frame = document.createElement('iframe');
@@ -162,6 +177,7 @@ function htmlToDOM(html) {
     document.body.removeChild(frame);
     return el;
 }
+
 
 function scrollChatBot() {
     let choiceBox = document.querySelector('.reply');

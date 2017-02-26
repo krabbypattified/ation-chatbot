@@ -19,7 +19,6 @@ function startChat() {
 }
 
 // GET people
-console.log('hi');
 fetch('/assets/json/people.json')
 .then((response) => {
   if(response.ok) return response.text();
