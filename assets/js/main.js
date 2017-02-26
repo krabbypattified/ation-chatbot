@@ -5,14 +5,17 @@ let loaded = false;
 function startChat() {
   if (!loaded) {
     initializeChat({
-      // initialNode: ['meetStudent', 'seeProjects', 'whoAreYou', 'pickOne'],
-      initialNode: 'test',
+      initialNode: ['meetStudent', 'seeProjects', 'whoAreYou', 'pickOne'],
       chatBox: '.chatbot',
       choiceBox: '.reply',
       beforeSpeech: '<div class="box">',
       afterSpeech: '</div>',
       beforeChoice: '<div class="box">',
-      afterChoice: '</div>'
+      afterChoice: '</div>',
+      onChatEnd: function () {
+        console.log('hi');
+        document.querySelector('.reply').classList.add('end')
+      }
     });
     loaded = true;
   }

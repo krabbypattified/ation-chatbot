@@ -80,22 +80,30 @@ hr {
   position: relative;
   padding-bottom: 3em;
 }
-@media all and (max-width: 999px) {
+@media all and (max-width: 899px) {
   .fold {
     padding-bottom: 0;
   }
 }
 .chatbot {
-  padding: 3rem;
+  padding: 2rem;
   padding-bottom: 1rem;
+  margin: 0 auto;
+  margin-bottom: 1rem;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  margin: 0 auto;
   min-height: 200px;
   max-width: 70em;
 min-height
   overflow-x: hidden;
+}
+@media all and (min-width: 700px) {
+  .chatbot {
+    padding: 3rem;
+    padding-bottom: 2rem;
+    margin-bottom: 0;
+  }
 }
 .chatbot .box,
 .reply .box {
@@ -105,7 +113,7 @@ min-height
   border-radius: 3px;
   display: inline;
   font-size: 1.2em;
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
   opacity: 0;
   animation-name: fadeInRight;
   animation-duration: 500ms;
@@ -124,12 +132,19 @@ min-height
   }
 }
 .reply {
-  padding: 2em;
+  padding: 0 2em 2em 2em;
+  margin-top: -1.5em;
+  margin-bottom: -2em;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  min-height: 122px;
+  min-height: 94px;
+  transition: all 0.3s;
+}
+.reply.end {
+  min-height: 0;
+  padding: 0;
 }
 .reply .box {
   background-color: #ff650d;
@@ -180,14 +195,14 @@ min-height
 .info {
   display: flex;
   flex-direction: column;
-  margin: 1.5em;
+  margin: 1em 1.5em;
   font-size: 1.1em;
   line-height: 1.5;
 }
 @media all and (min-width: 800px) {
   .info {
     max-width: 740px;
-    margin: 0 auto;
+    margin: 2em auto;
   }
 }
 .info .block {

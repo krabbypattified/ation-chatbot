@@ -6,22 +6,6 @@ function postEmail() {
   console.log('PUT to email database');
 }
 
-const test = {
-  speech: [
-    ['yo', 'hi', 'wassup'],
-    [`I'm ${bot}.`, 'suuuppp'],
-    'May I introduce you to one of our students? He\'s a web developer from Vernon, CT.'
-  ],
-  choices: [
-    {type: 'text', text: 'Sure!', next: {speech: 'fine ill leave'}},
-    {type: 'text', text: 'Sure!', next: {speech: 'fine ill leave'}},
-    {type: 'text', text: 'Sure!', next: {speech: 'fine ill leave'}},
-    {type: 'text', text: 'Sure!', next: {speech: 'fine ill leave'}},
-    {text: 'Maybe someone else.', next: 'meetStudent'},
-    {text: 'No thanks.', next: ['seeProjects', 'whoAreYou', 'pickOne']}
-  ]
-};
-
 const meetStudent = {
   speech: [
     greetings,

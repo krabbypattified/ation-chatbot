@@ -1,11 +1,17 @@
 // Chatbot
 .chatbot
-  padding 3rem
+  padding 2rem
   padding-bottom 1rem
+  margin 0 auto
+  margin-bottom 1rem
+  +above(700px)
+    padding 3rem
+    padding-bottom 2rem
+    margin-bottom 0
+
   display flex
   align-items flex-start
   flex-direction column
-  margin 0 auto
   min-height 200px
   max-width 70em
   min-height
@@ -18,7 +24,7 @@
     border-radius 3px
     display inline
     font-size 1.2em
-    margin-bottom 1em
+    margin-bottom 1rem
 
     opacity 0
     animation-name fadeInRight
@@ -35,12 +41,19 @@
 
 // Reply
 .reply
-  padding 2em
+  padding 0 2em 2em 2em
+  margin-top -1.5em
+  margin-bottom -2em
   display flex
   align-items center
   justify-content center
   flex-wrap wrap
-  min-height 122px
+  min-height 94px
+  transition all .3s
+  &.end
+    // transform scaleY(0)
+    min-height 0
+    padding 0
 
   .box
     @extend .chatbot .box
