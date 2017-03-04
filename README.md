@@ -5,5 +5,8 @@
     Putting `/build` in the browser URL is optional.
 
 # TODO
-- Possibly add Polymer
-- Check if this interferes with MAMP
+- Possibly add Polymer??
+- Check if this interferes with MAMP??
+
+- Add articles thingy
+- Add students & work from students

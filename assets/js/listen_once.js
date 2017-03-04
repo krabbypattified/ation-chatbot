@@ -1,1 +1,0 @@
-Element.prototype.listen_once=function(a,b,c){var d=b;c="undefined"==typeof c||c;var e="listen_once"+(0|9e6*Math.random()).toString(36),f=a.split(" ");d=function(){var a=d;return function(){var b;return this.hasOwnProperty(e)||(this[e]=!0,b=a.apply(this,arguments)),b}}();for(var g=0;g<f.length;g++)this.addEventListener(f[g],d,{capture:c,once:!0})};

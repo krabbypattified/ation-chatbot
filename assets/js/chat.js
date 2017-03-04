@@ -14,7 +14,7 @@ const config = {
     initialNode: 'demoNode',
     chatBox: '.chatbot',
     choiceBox: '.replies',
-    delay: 1300, // how fast to talk
+    delay: 1200, // how fast to talk
     beforeSpeech: '<span>',
     afterSpeech: '</span>',
     beforeChoice: '<span>',
@@ -75,15 +75,23 @@ function executeChatNode(_node) {
         setTimeout(() => {scrollChatBot(choiceBox)}, idx * config.delay + scrollDelay); // Scroll
     });
 
+    // Calculate when speech is done
+    let whenSpeechIsDone = config.delay * (node.speech.length - 1) + 500/*speech anim-duration*/;
+
+
+    /*==================
+      Next w/o choices
+    ==================*/
+    if (typeof node.next !== 'undefined') {
+      setTimeout(function() { executeChatNode(node.next) }, whenSpeechIsDone + config.delay - 300); // 300 makes up for CPU-intensive loading
+      return;
+    }
 
     /*============
        Choices
     ============*/
 
     // TODO: Implement listen_once?
-
-    // Calculate when speech is done
-    let whenSpeechIsDone = config.delay * (node.speech.length - 1) + 500/*speech anim-duration*/;
 
     // If there's 1 reply, it should be an array
     if (Object.prototype.toString.call(node.choices) === "[object Object]")
@@ -183,11 +191,13 @@ function createAllChoices(choices) {
 
 function createReply(_choice) {
     let choice = _choice;
+    if (typeof choice.callback === 'string') choice.callback = eval(choice.callback); // Eval callback
 
     let textBox = htmlToDOM(config.beforeChoice + choice.text + config.afterChoice);
     textBox.style.cssText = "animation-delay: " + choice.delay + "ms";
     textBox.addEventListener("click", () => {
       choiceBox.innerHTML = '';
+      if (typeof choice.callback !== 'undefined') choice.callback.apply(this, arguments); // Optional callback
       if (typeof choice.next !== 'undefined') executeChatNode(choice.next); // NEXT node
     });
     return textBox;
@@ -210,7 +220,7 @@ function createInput(_input) {
         choiceBox.innerHTML = '';
         if (typeof input.next !== 'undefined') executeChatNode(input.next); // NEXT node
 
-        try {input.callback(inputDOM.value)} // Execute callback
+        try {input.callback.apply(this, [inputDOM.value, ...arguments])} // Execute callback
         catch(err) {console.error('Input boxes should have a callback.')}
       }
     });

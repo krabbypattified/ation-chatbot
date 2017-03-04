@@ -2,7 +2,9 @@
 ===================*/
 var gulp         = require('gulp'),
     concat       = require('gulp-concat'),
-    order        = require("gulp-order");
+    order        = require('gulp-order'),
+    uglify       = require('gulp-uglify'),
+    babel        = require('gulp-babel'),
     stylus       = require('gulp-stylus'),
     autoprefixer = require('gulp-autoprefixer'),
     kit          = require('gulp-kit'),
@@ -40,11 +42,12 @@ gulp.task('scripts', function () {
   return gulp.src('assets/**/*.js')
   .pipe(order([
     'assets/js/chat.js',
-    'assets/js/data.js',
-    'assets/js/main.js',
+    'assets/js/chatConfig.js',
     'assets/**/*.js'
   ]))
   .pipe(concat('bundle.js'))
+  .pipe(babel({presets: ['es2015']}))
+  .pipe(uglify())
   .pipe(gulp.dest('build'))
   .pipe(reload({stream:true}));
 });
@@ -63,6 +66,7 @@ gulp.task('watch', function () {
   gulp.watch(['pages/**/*.styl', 'components/**/*.styl', 'assets/styl/**/*.styl'], ['styles']);
   gulp.watch(['pages/**/*.kit', 'components/**/*.kit'], ['kit']);
   gulp.watch('assets/js/**/*.js', ['scripts']);
+  gulp.watch('assets/**/*.json', ['scripts']);
 });
 
 /* Options

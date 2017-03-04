@@ -2,10 +2,11 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>-ATION</title>
+  <title>-ATION Digital Media Chatbot</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel=icon href="http://ation.digitalmediauconn.org/wp-content/themes/ation2016/favicon.ico">
   <script defer src=bundle.js></script>
 </head>
 <body>
@@ -15,11 +16,12 @@
   <img class="load" src="assets/img/ation-logo.png" />
 </div>
 <script defer>
+  /* listen_once */
   Element.prototype.listen_once=function(a,b,c){var d=b;c="undefined"==typeof c||c;var e="listen_once"+(0|9e6*Math.random()).toString(36),f=a.split(" ");d=function(){var a=d;return function(){var b;return this.hasOwnProperty(e)||(this[e]=!0,b=a.apply(this,arguments)),b}}();for(var g=0;g<f.length;g++)this.addEventListener(f[g],d,{capture:c,once:!0})};
   var load = document.querySelector('div.load');
   load.listen_once('animationEnd webkitAnimationEnd',function() {
     load.style.display = 'none';
-    startChat();
+    startChat(); // Start Chatbot
   }, false);
 </script>
 
