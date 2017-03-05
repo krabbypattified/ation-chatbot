@@ -1,16 +1,19 @@
-// Globals
-let chatBox,
-    choiceBox;
+/* Imports
+===================*/
+import autosizeInput from 'autosize-input'
+import smoothScroll from 'smoothscroll-polyfill'
 
-const RANDOM = null;
+smoothScroll.polyfill();
 
-let specialChoices = false;
 
-const choicesDelay = 270;
-const delayBetweenChoices = 200;
-const scrollDelay = 200; // buggy if too small
+/* Globals
+===================*/
+window.RANDOM = null;
 
-const config = {
+
+/* Defaults
+===================*/
+let config = {
     initialNode: 'demoNode',
     chatBox: '.chatbot',
     choiceBox: '.replies',
@@ -22,41 +25,67 @@ const config = {
     onChatEnd: function () {}
 };
 
-// Demo data
-const demoRandomSpeech = [RANDOM, 'Hi there!', 'Hola!', 'Welcome to -ATION', 'Welcome back!'];
-const otherNode = {speech: 'Bye!'};
-const demoNode = {
-    speech: [demoRandomSpeech, 'This is a chatbot demo.'],
-    choices: [
-      {text: 'Yeaa wassup', next: ['demoNode', 'otherNode']},
-      {text: 'Go away', next: 'otherNode'},
-      {text: ['Go away!!', 'Shut up!'], next: {speech: 'Fine. Bye!'}}
-    ]
-};
+let data = {
+  demoNode: {
+      speech: [
+        ['Hi there!', 'Hola!', 'Welcome to -ATION', 'Welcome back!'],
+        'This is a chatbot demo.'
+      ],
+      choices: [
+        {text: 'Yeaa wassup', next: 'demoNode'},
+        {text: 'Go away', next: ['demoNode', 'otherNode']},
+        {text: ['Go away!!', 'Shut up!'], next: {speech: 'Fine. Bye!'}}
+      ]
+  },
+  otherNode: {speech: 'Bye!'},
+  someFunc: function () { console.log('hi') }
+}
 
 
+/* Variables
+===================*/
+let specialChoices = false,
+    chatBox,
+    choiceBox;
+
+const choicesDelay = 270;
+const delayBetweenChoices = 200;
+const scrollDelay = 200; // buggy if too small
 
 
-// Chat functions
-
-function initializeChat(_config) {
-    let node = eval(config.initialNode); // parse it
+/* Exports
+===================*/
+export function initializeChat(_config, _data) {
     Object.assign(config, _config); // override default config
+    Object.assign(data, _data); // override default data
     chatBox = document.querySelector(config.chatBox); // set chat location
     choiceBox = document.querySelector(config.choiceBox); // set reply location
     executeChatNode(config.initialNode); // first message
 }
 
+// Useful helper function
+export function random(_array) {
+    let array = typeof arguments[0] === 'string' ? [...arguments] : _array.slice(0);
+    if (array[0] === RANDOM) array.shift();
+    let choice = array[Math.floor(Math.random()*array.length)];
+    return choice;
+}
+
+
+
+
+/* Functions
+===================*/
+
 function executeChatNode(_node) {
     let node;
     node = _node.constructor === Array ? random(_node) : _node; // Pick a node if random
-    node = eval(node); // Evaluate node
+    // node = eval(node); // Evaluate node
+    node = data[node];
 
 
-    /*============
-       Speech
-    ============*/
-
+    /* Speech
+    ===================*/
 
     // Pick a random reply if node.speech = [RANDOM, 'foo', 'bar', 'baz']
     if (node.speech.constructor === Array && node.speech[0] === RANDOM) node.speech = random(node.speech);
@@ -79,19 +108,16 @@ function executeChatNode(_node) {
     let whenSpeechIsDone = config.delay * (node.speech.length - 1) + 500/*speech anim-duration*/;
 
 
-    /*==================
-      Next w/o choices
-    ==================*/
+    /* Next w/o choices
+    ===================*/
     if (typeof node.next !== 'undefined') {
       setTimeout(function() { executeChatNode(node.next) }, whenSpeechIsDone + config.delay - 300); // 300 makes up for CPU-intensive loading
       return;
     }
 
-    /*============
-       Choices
-    ============*/
 
-    // TODO: Implement listen_once?
+    /* Choices // TODO: Implement listen_once?
+    ===================*/
 
     // If there's 1 reply, it should be an array
     if (Object.prototype.toString.call(node.choices) === "[object Object]")
@@ -126,19 +152,6 @@ function executeChatNode(_node) {
     setTimeout(() => {scrollChatBot(choiceBox)}, whenToScrollChoices);
 
 } /* End executeChatNode */
-
-
-
-
-
-// Helpers
-
-function random(_array) {
-    let array = typeof arguments[0] === 'string' ? [...arguments] : _array.slice(0);
-    if (array[0] === RANDOM) array.shift();
-    let choice = array[Math.floor(Math.random()*array.length)];
-    return choice;
-}
 
 
 function createAllSpeech(speech) {
@@ -197,7 +210,8 @@ function createReply(_choice) {
     textBox.style.cssText = "animation-delay: " + choice.delay + "ms";
     textBox.addEventListener("click", () => {
       choiceBox.innerHTML = '';
-      if (typeof choice.callback !== 'undefined') choice.callback.apply(this, arguments); // Optional callback
+      // NOTE: if fit breaks, use 'this' :                         .apply(this, arguments)
+      if (typeof choice.callback !== 'undefined') choice.callback.apply(choice, arguments); // Optional callback
       if (typeof choice.next !== 'undefined') executeChatNode(choice.next); // NEXT node
     });
     return textBox;
