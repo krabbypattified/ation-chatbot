@@ -1,5 +1,9 @@
 import './chatbot'
 import { timeOfDay, changeStudent } from './chatfunctions'
+import smoothScroll from 'smoothscroll-polyfill'
+
+
+const greeting = [RANDOM, 'Ciao!', 'Hola!', 'It\'s good to see you again!', 'Welcome back!', `Good ${timeOfDay()}!`];
 
 export let introduce = {
   speech: [
@@ -10,8 +14,35 @@ export let introduce = {
 }
 
 export let welcomeBack = {
-  speech: [RANDOM, 'Ciao!', 'Hola!', 'It\'s good to see you again!', 'Welcome back!', `Good ${timeOfDay()}!`],
-  next: ['meetStudent', 'projects', 'pickOne']
+  speech: greeting,
+  next: ['meetStudent', 'projects', 'pickOne', 'articles']
+}
+
+export let welcomeBackAgain = {
+  speech: greeting,
+  next: ['pickOne', 'articles']
+}
+
+// TODO: Make it a dynamic initial path via prismic?
+export let articles = {
+  speech: [
+    'I found this cool article called ______ for you to read!',
+    'It talks about ___.',
+    // the article
+  ],
+  choices: [
+    {text: 'What are your thoughts?', next: 'articleThoughts'},
+    {text: 'Sounds boring.', next: 'pickOne'}
+  ]
+}
+
+export let articleThoughts = {
+  speech: [
+    'I thought it explained our ___ really well'
+  ],
+  choices: [
+    {text: 'Anything else?', next: 'pickOne'}
+  ]
 }
 
 export let meetStudent = {
@@ -21,7 +52,7 @@ export let meetStudent = {
     {text: 'Maybe someone else.', next: 'someoneElse'},
     {text: 'No thanks.', next: 'pickOne'}
   ]
-};
+}
 
 export let someoneElse = {
   speech: 'Ok. Who would you like to meet?',
@@ -33,12 +64,12 @@ export let someoneElse = {
     {text: `A ${MAJOR['motion']}`,   next: 'showStudent',   major: 'motion',   callback: changeStudent },
     {text: 'No one', next: 'pickOne'}
   ]
-};
+}
 
 export let showStudent = {
   speech: 'This string should be replaced with a person and his/her content via changeStudent function.',
   next: 'someoneElseAgain'
-};
+}
 
 export let someoneElseAgain = {
   speech: 'Would you like to meet anybody else?',
@@ -46,7 +77,7 @@ export let someoneElseAgain = {
     {text: 'Yeah!', next: 'someoneElse'},
     {text: 'No thanks.', next: 'pickOne'}
   ]
-};
+}
 
 export let creators = {
   speech: 'Would you like to see who created me?',
@@ -54,7 +85,7 @@ export let creators = {
     {text: 'Yeah!', next: 'showCreators'},
     {text: 'No thanks.', next: 'someoneElse'}
   ],
-};
+}
 
 export let showCreators = {
   speech: [
@@ -62,10 +93,9 @@ export let showCreators = {
     '<a href="https://gaberogan.com"><img src="https://image.ibb.co/gX5qgF/profile_wide.jpg"></a><img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAARlAAAAJDA3YWQ3YzU4LTRlM2YtNDE1MC05OGVlLTBkMjVjZDM0NTI2Yw.jpg">',
     'Gabe was the designer and developer of this chatbot, and Connor taught me what to say!',
     'If you\'d like to see more of their work, visit <a href="https://gaberogan.com">gaberogan.com</a> or <a href="https://gaberogan.com">Connor\'s LinkedIn</a>'
-    // TODO: Connor's linkedin link
   ],
   next: 'pickOne'
-};
+}
 
 export let projects = {
   speech: 'Would you like to view some of our projects?',
@@ -73,7 +103,7 @@ export let projects = {
     {text: 'Yeah!', next: 'seeProjects'},
     {text: 'No thanks.', next: 'pickOne'}
   ],
-};
+}
 
 export let seeProjects = {
   speech: [
@@ -88,7 +118,7 @@ export let seeProjects = {
     {text: 'Who worked on these?', next: 'whoWorkedOnThese'},
     {text: 'Thanks for sharing!', next: {speech: 'You\'re welcome!', next: 'pickOne'} }
   ]
-};
+}
 
 export let whoWorkedOnThese = {
   speech: ['Every student at the top of this page worked on one of these projects.', 'Would you like to meet one of them?'],
@@ -96,22 +126,35 @@ export let whoWorkedOnThese = {
     {text: 'Sure!', next: 'someoneElse'},
     {text: 'No thanks.', next: 'funTalking'}
   ]
-};
+}
 
 export let pickOne = {
   speech: 'Is there anything you\'d like to know about?',
   choices: [
-    {text: 'Student concentrations.', next: 'meetStudent'},
+    {text: 'Concentrations.', next: 'concentrations'},
     {text: 'Students!', next: 'meetStudent'},
     {text: 'Projects!', next: 'seeProjects'},
     {text: 'Nothin\'.', next: 'goodbye'}
   ]
-};
+}
+
+export let concentrations = {
+  speech: [
+    'Our concentrations include 2D Animation & Motion Graphics, 3D Animation & Visualization, Web Design & Development, Game Design & Development, Digital Media Strategies for Business, and Digital Humanities.',
+    'Please visit <a target="_blank" href="http://dmd.uconn.edu/concentrations/">Our site</a> if you\'d like more info!'
+  ],
+  next: 'pickOne',
+}
 
 export let funTalking = {
   speech: ['Ok. It was fun talking!', ['Cya later!', 'Au revoir!']]
 }
 
 export let goodbye = {
-  speech: [RANDOM, 'Ok, bye!', 'Cya later!', 'Au revoir!']
-};
+  speech: [RANDOM, 'Ok, bye!', 'Cya later!', 'Au revoir!'],
+  speechCallback: function () {
+    setTimeout(function() {
+      document.querySelector('.info').scrollIntoView({behavior: "smooth"});
+    }, 1500);
+  }
+}

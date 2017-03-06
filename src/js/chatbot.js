@@ -106,6 +106,13 @@ function executeChatNode(_node) {
     let whenSpeechIsDone = config.delay * (node.speech.length - 1) + 500/*speech anim-duration*/;
 
 
+    /* Speech Callback
+    ===================*/
+    if (typeof node.speechCallback !== 'undefined') {
+      node.speechCallback.apply(node, arguments);
+    }
+
+
     /* Next w/o choices
     ===================*/
     if (typeof node.next !== 'undefined') {
@@ -150,6 +157,8 @@ function executeChatNode(_node) {
     setTimeout(() => {scrollChatBot(choiceBox)}, whenToScrollChoices);
 
 } /* End executeChatNode */
+
+
 
 
 function createAllSpeech(speech) {

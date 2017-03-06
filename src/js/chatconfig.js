@@ -1,7 +1,14 @@
-// Initial node based on firstTime
-const firstTime = localStorage.getItem('firstTime') === null;
-if (firstTime) localStorage.setItem('firstTime', 'no');
-const initialNode = firstTime ? 'introduce' : 'welcomeBack';
+// Initial node based on nth time visiting
+const nthTime = localStorage.getItem('nthTime');
+if (nthTime === null) localStorage.setItem('nthTime', 1);
+else localStorage.setItem('nthTime', nthTime + 1);
+
+let initialNode;
+if (nthTime === 1) initialNode = 'introduce';
+if (nthTime === 2) initialNode = 'welcomeBack';
+else initialNode = 'welcomeBack';
+// else initialNode = 'welcomeBackAgain';
+
 
 // Config object
 export let config = {
