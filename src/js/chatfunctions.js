@@ -46,21 +46,19 @@ export function changeStudent(_type) {
 
     let peepToShowcase;
 
-    // Bypass filter if RANDOM
-    if (_type === RANDOM) {
-      let randomPeep = random(peeps, true);
-      peepToShowcase = randomPeep[0];
-      peeps.push(peeps.splice(randomPeep[1], 1)[0]); // move chosen person to end of array
-    }
-    // ELSE filter people by major
-    else {
-      peepToShowcase = peeps.find(function(person, idx) {
-        if (person.major === type) { // notice 'this'
+    peepToShowcase = peeps.find(function(person, idx) {
+        // Don't look for 'type' if RANDOM
+        if (_type === RANDOM && person.work.length > 0) {
             peeps.push(peeps.splice(idx, 1)[0]); // move chosen person to end of array
             return true;
         }
-      });
-    }
+        // ELSE filter people by major
+        else if (person.major === type) {
+            peeps.push(peeps.splice(idx, 1)[0]);
+            return true;
+        }
+    });
+
     // If no one found
     if (peepToShowcase === undefined) {
         showStudent.speech = [`Sorry, there are no ${MAJOR[type]}s in the system. Please pick a different concentration.`];

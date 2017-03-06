@@ -4,8 +4,8 @@ Prismic.api("https://ation-chatbot.prismic.io/api#format=json").then(api => {
   return api.query(""); // An empty query will return all the documents
 }).then(function(response) {
     // console.log(response.results);
-    let peeps = shuffle(response.results);
-    let people = peeps.map(peep=>{
+    let people = shuffle(response.results);
+    people = people.map(peep=>{
 
       let work = [];
       // Embeds
@@ -30,6 +30,12 @@ Prismic.api("https://ation-chatbot.prismic.io/api#format=json").then(api => {
         work: work
       };
     });
+
+    // Filter out invalid people
+    people = people.filter(peep=>{
+      return peep.name && peep.url ? true : false;
+    });
+
     // console.log(people);
     window.peeps = people;
 
