@@ -44,6 +44,12 @@ gulp.task('scripts', function () {
   .pipe(gulp.dest('dist'))
   .pipe(reload({stream:true}));
 });
+/*=================*/
+gulp.task('scripts-uglify', function () {
+  return gulp.src('src/js/index.js')
+  .pipe(gulpWebpack(require('./webpack.config.dist.js'), webpack))
+  .pipe(gulp.dest('dist'));
+});
 
 
 /* Images
@@ -91,3 +97,4 @@ const browserSyncOptions = {
 /* Default
 ===================*/
 gulp.task('default', ['styles', 'kit', 'scripts', 'images', 'browser-sync', 'watch']);
+gulp.task('build', ['styles', 'kit', 'scripts-uglify', 'images']);

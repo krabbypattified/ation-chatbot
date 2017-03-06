@@ -16,8 +16,10 @@ input {
 }
 button,
 input {
-/* 1 */
   overflow: visible;
+}
+.hide {
+  display: none !important;
 }
 @keyframes slideUp {
   from {
@@ -79,7 +81,7 @@ hr {
   padding: 2rem;
   padding-bottom: 1rem;
   margin: 0 auto;
-  margin-bottom: 1rem;
+  margin-bottom: 3px;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -88,7 +90,7 @@ hr {
 min-height
   overflow-x: hidden;
 }
-@media all and (min-width: 700px) {
+@media all and (min-width: 600px) {
   .chatbot {
     padding: 3rem;
     padding-bottom: 2rem;
@@ -132,6 +134,11 @@ min-height
   min-height: 94px;
   transition: all 0.3s;
 }
+@media all and (max-width: 599px) {
+  .reply {
+    padding: 0 5px 1em 5px;
+  }
+}
 .reply.end {
   min-height: 0;
   padding: 0;
@@ -151,6 +158,11 @@ min-height
   animation-duration: 400ms;
   animation-delay: 400ms;
   animation-fill-mode: forwards;
+}
+@media all and (max-width: 599px) {
+  .reply .box {
+    margin: 5px;
+  }
 }
 .reply .box:hover {
   background-color: #4caf50;
@@ -257,14 +269,43 @@ min-height
 .contact {
   display: flex;
   justify-content: center;
-  margin: 3em 1.5em 6em 1.5em;
+  align-items: center;
+  margin: 1.5em 1.5em 4.5em 1.5em;
+  height: 100px;
+  perspective: 1000px;
 }
 @media all and (max-width: 699px) {
   .contact {
-    margin: 1.5em;
+    margin: 0 1.5em 1em 1.5em;
   }
 }
-.contact div {
+.contact .contact-methods {
+  display: flex;
+}
+.contact .contact-methods img {
+  display: block;
+  height: 100px;
+}
+@media all and (max-width: 449px) {
+  .contact .contact-methods img {
+    height: 85px;
+  }
+}
+.contact .contact-methods a {
+  margin: 0 2em;
+  animation-name: flipIn;
+  animation-duration: 130ms;
+  transition: transform 0.1s;
+}
+@media all and (max-width: 449px) {
+  .contact .contact-methods a {
+    margin: 0 1em;
+  }
+}
+.contact .contact-methods a:hover {
+  transform: scale(0.95);
+}
+.contact .contact-btn {
   background-color: #ff5d00;
   -webkit-user-select: none;
       -ms-user-select: none;
@@ -279,12 +320,23 @@ min-height
   text-align: center;
   width: 600px;
 }
-.contact div:hover {
+.contact .contact-btn:hover {
   background-color: #4caf50;
   transition: all 0.06s;
 }
-.contact div:active {
+.contact .contact-btn:active {
   background-color: #449e48;
+}
+@keyframes flipIn {
+  from {
+    transform: rotateX(90deg);
+  }
+  74% {
+    transform: rotateX(-18deg);
+  }
+  to {
+    transform: rotateX(0);
+  }
 }
 div.load {
   background-color: #ff5d00;

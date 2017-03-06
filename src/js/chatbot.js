@@ -81,10 +81,10 @@ function executeChatNode(_node) {
     let node;
     node = _node.constructor === Array ? random(_node) : _node; // Pick a node if random
     // node = eval(node); // Evaluate node
-    node = data[node];
+    if (typeof node == 'string') node = data[node];
 
 
-    /* Speech
+    /* Speech // TODO: Implement listen_once?
     ===================*/
 
     // Pick a random reply if node.speech = [RANDOM, 'foo', 'bar', 'baz']
@@ -92,8 +92,6 @@ function executeChatNode(_node) {
 
     // Make sure node.speech is an array
     if (typeof node.speech === 'string') node.speech = [node.speech];
-
-    // TODO: Implement animation delay. Maybe listen_once. Timeouts cause browser refresh circle.
 
     // Create speech DOM
     let speechBoxes = createAllSpeech(node.speech);

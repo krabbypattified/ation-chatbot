@@ -59,10 +59,29 @@
 .contact
   display flex
   justify-content center
-  margin 3em 1.5em 6em 1.5em
+  align-items center
+  margin 1.5em 1.5em 4.5em 1.5em
+  height 100px
+  perspective 1000px
   +below(700px)
-    margin 1.5em
-  div
+    margin 0 1.5em 1em 1.5em
+  .contact-methods
+    display flex
+    img
+      display block
+      height 100px
+      +below(450px) // good for 3 buttons
+        height 85px
+    a
+      margin 0 2em
+      animation-name: flipIn;
+      animation-duration: 130ms;
+      transition transform .1s
+      +below(450px) // good for 3 buttons
+        margin 0 1em
+      &:hover
+        transform scale(.95)
+  .contact-btn
     background-color orange
     user-select none
     cursor pointer
@@ -79,3 +98,12 @@
       transition all .06s
     &:active
       background-color darken(#4caf50,10%)
+
+
+@keyframes flipIn
+  from
+    transform: rotateX(90deg)
+  74%
+    transform: rotateX(-18deg)
+  to
+    transform: rotateX(0)

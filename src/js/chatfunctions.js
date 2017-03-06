@@ -39,7 +39,7 @@ export function timeOfDay() {
 export function changeStudent(_type) {
     let type;
     if (_type === RANDOM) type = random(Object.keys(MAJOR));
-    else type = _type;
+    else type = _type.major;
     // now type should be 'web' or something
 
     let people = peeps; // temp variable from loadPeople.js
