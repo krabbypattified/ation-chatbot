@@ -53,8 +53,17 @@ const delayBetweenChoices = 200;
 const scrollDelay = 200; // buggy if too small
 
 
+
+
+
 /* Exports
 ===================*/
+
+/**
+ * Initializes the chat.
+ * @param {Object} _config - Chatbot settings.
+ * @param {Object} _data - Chat nodes.
+ */
 export function initializeChat(_config, _data) {
     Object.assign(config, _config); // override default config
     Object.assign(data, _data); // override default data
@@ -63,13 +72,22 @@ export function initializeChat(_config, _data) {
     executeChatNode(config.initialNode); // first message
 }
 
-// Useful helper function
-export function random(_array) {
+/**
+ * Returns a random array element.
+ * @param {Array} _array - The array to pick from.
+ * @param {boolean} index - Whether to return the index picked.
+ */
+export function random(_array, index = false) {
     let array = typeof arguments[0] === 'string' ? [...arguments] : _array.slice(0);
     if (array[0] === RANDOM) array.shift();
-    let choice = array[Math.floor(Math.random()*array.length)];
+    let choiceIndex = Math.floor(Math.random()*array.length);
+    let choice = array[choiceIndex];
+
+    if (index) return [choice, choiceIndex];
     return choice;
 }
+
+
 
 
 
@@ -218,7 +236,7 @@ function createReply(_choice) {
     textBox.addEventListener("click", () => {
       choiceBox.innerHTML = '';
       // NOTE: if fit breaks, use 'this' :                         .apply(this, arguments)
-      if (typeof choice.callback !== 'undefined') choice.callback.apply(choice, arguments); // Optional callback
+      if (typeof choice.callback !== 'undefined') choice.callback.apply(choice); // Optional callback. NOTE: Custom for me?
       if (typeof choice.next !== 'undefined') executeChatNode(choice.next); // NEXT node
     });
     return textBox;

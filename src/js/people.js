@@ -8,9 +8,16 @@ Prismic.api("https://ation-chatbot.prismic.io/api#format=json").then(api => {
     let people = peeps.map(peep=>{
 
       let work = [];
+      // Embeds
+      if (peep.get('student.work_links')) {
+        peep.get('student.work_links').value.forEach(embed=>{
+          work.push(embed.fragments.embed.value.oembed.html);
+        })
+      }
+      // Images
       if (peep.get('student.work')) {
         peep.get('student.work').value.forEach(piece=>{
-          work.push(piece.fragments.piece.url);
+          work.push(`<img src="${piece.fragments.piece.url}">`);
         })
       }
 

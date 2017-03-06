@@ -23,7 +23,7 @@ export let welcomeBackAgain = {
   next: ['pickOne', 'articles']
 }
 
-// TODO: Make it a dynamic initial path via prismic?
+// TODO: Articles via prismic?
 export let articles = {
   speech: [
     'I found this cool article called ______ for you to read!',
@@ -65,6 +65,8 @@ export let someoneElse = {
     {text: 'No one', next: 'pickOne'}
   ]
 }
+
+// TODO: Add a 'currently works at' for people?
 
 export let showStudent = {
   speech: 'This string should be replaced with a person and his/her content via changeStudent function.',
@@ -109,9 +111,9 @@ export let seeProjects = {
   speech: [
     'Ok! Here are a few things we\'ve worked on recently:',
     // TODO: add everything and make it random?
-    '<a href="http://ation.digitalmediauconn.org/project/skybox/"><img src="http://ation.digitalmediauconn.org/wp-content/uploads/2016/03/skybox-work2-600x0-c-default.jpg"></a>',
-    '<a href="http://ation.digitalmediauconn.org/project/ct-childrens-alliance/"><img src="http://ation.digitalmediauconn.org/wp-content/uploads/2016/10/ChildrensAlliance_Tile-600x0-c-default.jpg"></a>',
-    '<a href="http://ation.digitalmediauconn.org/project/what-is-a-persona/"><img src="http://ation.digitalmediauconn.org/wp-content/uploads/2016/04/persona-work2-600x0-c-default.jpg"></a>',
+    '<iframe src="https://player.vimeo.com/video/75316460" width="640" height="360" frameborder="0" title="SkyBox by UCONN" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>',
+    '<iframe width="480" height="270" src="https://www.youtube.com/embed/kskoH1ChFVw" frameborder="0" allowfullscreen></iframe>',
+    '<iframe src="https://player.vimeo.com/video/105367992" width="640" height="360" frameborder="0" title="SkyBox by UCONN" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>',
     'If you\'d like to see more, visit <a href="http://ation.digitalmediauconn.org/work/" target="_blank">ation.digitalmediauconn.org</a>'
   ],
   choices: [

@@ -35,27 +35,39 @@ export function timeOfDay() {
     else return 'evening';
 }
 
+// TODO: make it pluck array and re-loop
 
 export function changeStudent(_type) {
     let type;
     if (_type === RANDOM) type = random(Object.keys(MAJOR));
-    else type = _type.major;
+    else if (typeof _type == 'undefined') type = this.major;
+    else type = _type; // shouldn't fire in my chatbot
     // now type should be 'web' or something
 
-    let people = peeps; // temp variable from loadPeople.js
     let peepToShowcase;
 
-    // Bypass filter if RANDOM   OR   filter people by major    (notice 'this')
-    peepToShowcase = _type === RANDOM ? [random(people)] : people.filter(person => (person.major === this.major));
-
-    // Make peepToShowcase a person object
-    if (peepToShowcase.length == 1) { peepToShowcase = peepToShowcase[0]; } // If one person, convert to string.
-    else if (peepToShowcase.length > 1) { peepToShowcase = random(peepToShowcase); } // Pick a random person.
-    else { // No people with that major found
-      showStudent.speech = [`Sorry, there are no ${MAJOR[type]}s in the system. Please pick a different concentration.`];
-      showStudent.next = 'someoneElse';
-      return;
+    // Bypass filter if RANDOM
+    if (_type === RANDOM) {
+      let randomPeep = random(peeps, true);
+      peepToShowcase = randomPeep[0];
+      peeps.push(peeps.splice(randomPeep[1], 1)[0]); // move chosen person to end of array
     }
+    // ELSE filter people by major
+    else {
+      peepToShowcase = peeps.find(function(person, idx) {
+        if (person.major === type) { // notice 'this'
+            peeps.push(peeps.splice(idx, 1)[0]); // move chosen person to end of array
+            return true;
+        }
+      });
+    }
+    // If no one found
+    if (peepToShowcase === undefined) {
+        showStudent.speech = [`Sorry, there are no ${MAJOR[type]}s in the system. Please pick a different concentration.`];
+        showStudent.next = 'someoneElse';
+        return;
+    }
+
 
     // handle the 'meetStudent' node.speech
     let hasMajor = peepToShowcase.major && peepToShowcase.major.length >= 1;
@@ -73,8 +85,8 @@ export function changeStudent(_type) {
 
         if (typeof peepToShowcase.work === 'string') peepToShowcase.work = [peepToShowcase.work]; // allow for string input with work
 
-        peepToShowcase.work.forEach(imageURL => { // fill links array
-          links.push(`<img src="${imageURL}">`);
+        peepToShowcase.work.forEach(media => { // fill links array
+          links.push(media);
         });
 
         also_ = 'also '; // add 'also '
