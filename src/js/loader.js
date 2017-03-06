@@ -17,6 +17,7 @@ load.listen_once('animationEnd webkitAnimationEnd',function() {
 
 // For slow internet
 setTimeout(function() {
+    load.style.display = 'none';
     if (!chatStarted) initializeChat(config, data); chatStarted = true;
 }, 2000);
 
