@@ -15,7 +15,7 @@ export let introduce = {
 
 export let welcomeBack = {
   speech: greeting,
-  next: ['meetStudent', 'projects', 'pickOne', 'articles']
+  next: ['meetStudent', 'projects', 'pickOne']
 }
 
 export let welcomeBackAgain = {
