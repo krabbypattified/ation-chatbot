@@ -32,7 +32,7 @@ Prismic.api("https://ation-chatbot.prismic.io/api#format=json").then(api => {
         let person = document.createElement('div');
         person.classList.add('person');
 
-        if (!peep.pic) peep.pic = 'http://lorempixel.com/350/200/';
+        if (!peep.pic) peep.pic = `http://lorempixel.com/${330+randomInt(1,40)}/${180+randomInt(1,40)}/abstract`;
 
         person.style.cssText = "background-image: url("+peep.pic+"); animation-delay: "+ (200 + 50*idx) +"ms";
 
@@ -56,47 +56,12 @@ Prismic.api("https://ation-chatbot.prismic.io/api#format=json").then(api => {
 function(err) { console.log("Something went wrong: ", err) });
 
 
-
-// GET people
-// fetch('people.json')
-// .then((response) => {
-//   if(response.ok) return response.text();
-// })
-// .then((people) => {
-//   let peeps = JSON.parse(people);
-//   peeps = shuffle(peeps);
-//   window.peeps = peeps;
-//
-//   window.dispatchEvent( new Event('peopleLoaded') );
-//
-//   peeps.forEach((peep, idx) => {
-//       let person = document.createElement('div');
-//       person.classList.add('person');
-//
-//       let hasPic = peep.hasOwnProperty('pic') && peep.pic.length >= 1;
-//       if (!hasPic) peep.pic = 'http://lorempixel.com/350/200/';
-//
-//       person.style.cssText = "background-image: url("+peep.pic+"); animation-delay: "+ (200 + 50*idx) +"ms";
-//
-//       let p = document.createElement('p');
-//       p.innerHTML = peep.name;
-//
-//       let a = document.createElement('a');
-//       a.target = "_blank";
-//       a.href = peep.url;
-//
-//       person.appendChild(p);
-//       a.appendChild(person);
-//
-//       let peopleDiv = document.querySelector('.people');
-//       peopleDiv.insertBefore(a, peopleDiv.childNodes[idx]);
-//
-//   });
-// });
-
-
 /* Functions
 ===================*/
+
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
