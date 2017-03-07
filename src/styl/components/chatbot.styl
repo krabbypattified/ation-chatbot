@@ -25,19 +25,23 @@
     display inline
     font-size 1.2em
     margin-bottom 1rem
+    max-width 100%
 
     opacity 0
     animation-name fadeInRight
     animation-duration 500ms
     animation-fill-mode forwards
 
-    img
-      display block
-      max-width 600px
-      max-height 400px
-      +below(600px)
-        max-width 100%
+    a
+      word-wrap break-word
 
+    img, iframe
+      display block
+      max-width 630px
+      max-height 400px
+      +below(780px)
+        max-width 100%
+        max-height calc(56vw - 4.2rem)
 
 // Reply
 .reply

@@ -106,21 +106,31 @@ min-height
   display: inline;
   font-size: 1.2em;
   margin-bottom: 1rem;
+  max-width: 100%;
   opacity: 0;
   animation-name: fadeInRight;
   animation-duration: 500ms;
   animation-fill-mode: forwards;
 }
+.chatbot .box a,
+.reply .box a {
+  word-wrap: break-word;
+}
 .chatbot .box img,
-.reply .box img {
+.reply .box img,
+.chatbot .box iframe,
+.reply .box iframe {
   display: block;
-  max-width: 600px;
+  max-width: 630px;
   max-height: 400px;
 }
-@media all and (max-width: 599px) {
+@media all and (max-width: 779px) {
   .chatbot .box img,
-  .reply .box img {
+  .reply .box img,
+  .chatbot .box iframe,
+  .reply .box iframe {
     max-width: 100%;
+    max-height: calc(56vw - 4.2rem);
   }
 }
 .reply {
