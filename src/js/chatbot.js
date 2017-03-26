@@ -268,15 +268,11 @@ function createInput(_input) {
 
 
 function htmlToDOM(html) {
-    var frame = document.createElement('iframe');
-    frame.style.display = 'none';
-    document.body.appendChild(frame);
-    frame.contentDocument.open();
-    frame.contentDocument.write(html);
-    frame.contentDocument.close();
-    var el = frame.contentDocument.body.firstChild;
-    document.body.removeChild(frame);
-    return el;
+    var htmlString = html;
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(htmlString, "text/html");
+
+    return doc.body.firstChild;
 }
 
 
