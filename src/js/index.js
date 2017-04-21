@@ -1,4 +1,4 @@
 import './analytics'
 import './loader'
-import './people'
+import './prismicdata'
 import './contact'

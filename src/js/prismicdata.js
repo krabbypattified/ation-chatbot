@@ -1,9 +1,29 @@
 import Prismic from 'prismic.io'
 
 Prismic.api("https://ation-chatbot.prismic.io/api#format=json").then(api => {
-  return api.query(""); // An empty query will return all the documents
-}).then(function(response) {
-    console.log(response.results);
+  return api.query(Prismic.Predicates.at('document.type', 'student')); // An empty query will return all the documents
+}).then(response => handlePeople(response), err => { console.log("No peeps from prismic! : ", err) });
+
+Prismic.api("https://ation-chatbot.prismic.io/api#format=json").then(api => {
+  return api.query(Prismic.Predicates.at('document.type', 'client-work')); // An empty query will return all the documents
+}).then(response => handleClientWork(response), err => { console.log("No peeps from prismic! : ", err) });
+
+
+/* Functions
+===================*/
+
+function handleClientWork(response) {
+    // console.log(response.results);
+    let videos = shuffle(response.results);
+    videos = videos.map(video=>video.get('client-work.video-link').value.oembed.html);
+
+    // console.log(videos);
+    window.client_work = videos;
+    window.dispatchEvent( new Event('clientWorkLoaded') );
+}
+
+function handlePeople(response) {
+    // console.log(response.results);
     let people = shuffle(response.results);
     people = people.map(peep=>{
 
@@ -66,17 +86,15 @@ Prismic.api("https://ation-chatbot.prismic.io/api#format=json").then(api => {
 
     });
 
-
-},
-function(err) { console.log("Something went wrong: ", err) });
+}
 
 
-/* Functions
-===================*/
 
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;

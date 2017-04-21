@@ -25,6 +25,7 @@ let config = {
     onChatEnd: function () {}
 };
 
+// NOTE: BONUS! - It can change in the middle of running because objects are stored by reference
 let data = {
   demoNode: {
       speech: [

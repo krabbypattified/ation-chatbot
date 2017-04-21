@@ -108,14 +108,7 @@ export let projects = {
 }
 
 export let seeProjects = {
-  speech: [
-    'Ok! Here are a few things we\'ve worked on recently:',
-    // TODO: add everything and make it random?
-    '<iframe src="https://player.vimeo.com/video/75316460" width="640" height="360" frameborder="0" title="SkyBox by UCONN" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>',
-    '<iframe width="480" height="270" src="https://www.youtube.com/embed/kskoH1ChFVw" frameborder="0" allowfullscreen></iframe>',
-    '<iframe src="https://player.vimeo.com/video/105367992" width="640" height="360" frameborder="0" title="SkyBox by UCONN" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>',
-    'If you\'d like to see more, visit <a href="http://ation.digitalmediauconn.org/work/" target="_blank">ation.digitalmediauconn.org</a>'
-  ],
+  speech: 'This string should be replaced with the client videos via insertClientWork function.',
   choices: [
     {text: 'Who worked on these?', next: 'whoWorkedOnThese'},
     {text: 'Thanks for sharing!', next: {speech: 'You\'re welcome!', next: 'pickOne'} }

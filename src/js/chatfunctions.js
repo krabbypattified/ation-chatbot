@@ -1,6 +1,6 @@
 // Imports
 import { random } from './chatbot'
-import { meetStudent, showStudent } from './chatdata'
+import { meetStudent, showStudent, seeProjects } from './chatdata'
 
 /* Setup
 ===================*/
@@ -8,6 +8,11 @@ import { meetStudent, showStudent } from './chatdata'
 // Listen for when people are loaded
 window.addEventListener('peopleLoaded', function () {
   changeStudent(RANDOM);
+});
+
+// Listen for when client work is loaded
+window.addEventListener('clientWorkLoaded', function () {
+  insertClientWork();
 });
 
 // Majors
@@ -33,6 +38,14 @@ export function timeOfDay() {
     if (curHr < 12) return 'morning';
     else if (curHr < 18) return 'afternoon';
     else return 'evening';
+}
+
+export function insertClientWork() {
+  seeProjects.speech = [
+    'Ok! Here are a few things we\'ve worked on recently:',
+    ...client_work,
+    'If you\'d like to see more, visit <a href="http://ation.digitalmediauconn.org/work/" target="_blank">ation.digitalmediauconn.org</a>'
+  ];
 }
 
 // TODO: make it pluck array and re-loop
