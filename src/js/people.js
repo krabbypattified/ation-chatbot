@@ -3,7 +3,7 @@ import Prismic from 'prismic.io'
 Prismic.api("https://ation-chatbot.prismic.io/api#format=json").then(api => {
   return api.query(""); // An empty query will return all the documents
 }).then(function(response) {
-    // console.log(response.results);
+    console.log(response.results);
     let people = shuffle(response.results);
     people = people.map(peep=>{
 
@@ -17,7 +17,9 @@ Prismic.api("https://ation-chatbot.prismic.io/api#format=json").then(api => {
       // Images
       if (peep.get('student.work')) {
         peep.get('student.work').value.forEach(piece=>{
-          work.push(`<img src="${piece.fragments.piece.url}">`);
+          if (piece.fragments.piece) {
+            work.push(`<img src="${piece.fragments.piece.url}">`);
+          }
         })
       }
 
