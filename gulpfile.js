@@ -12,6 +12,8 @@ const gulp         = require('gulp'),
       reload       = browserSync.reload;
 
 
+const buildFolder = 'docs' // for deploying to github pages
+
 
 /* Styles
 ===================*/
@@ -20,7 +22,7 @@ gulp.task('styles', function () {
   .pipe(plumber(plumberOptions))
   .pipe(stylus())
   .pipe(autoprefixer({browsers: ['> 5% in US']}))
-  .pipe(gulp.dest('dist'))
+  .pipe(gulp.dest(buildFolder))
   .pipe(reload({stream:true}));
 });
 
@@ -31,7 +33,7 @@ gulp.task('kit', function () {
   return gulp.src('src/kit/index.kit')
   .pipe(plumber(plumberOptions))
   .pipe(kit())
-  .pipe(gulp.dest('dist'))
+  .pipe(gulp.dest(buildFolder))
   .pipe(reload({stream:true}));
 });
 
@@ -41,14 +43,14 @@ gulp.task('kit', function () {
 gulp.task('scripts', function () {
   return gulp.src('src/js/index.js')
   .pipe(gulpWebpack(require('./webpack.config.js'), webpack))
-  .pipe(gulp.dest('dist'))
+  .pipe(gulp.dest(buildFolder))
   .pipe(reload({stream:true}));
 });
 /*=================*/
 gulp.task('scripts-uglify', function () {
   return gulp.src('src/js/index.js')
   .pipe(gulpWebpack(require('./webpack.config.dist.js'), webpack))
-  .pipe(gulp.dest('dist'));
+  .pipe(gulp.dest(buildFolder));
 });
 
 
@@ -56,7 +58,7 @@ gulp.task('scripts-uglify', function () {
 ===================*/
 gulp.task('images', function () {
   return gulp.src('src/img/*')
-  .pipe(gulp.dest('dist/img'))
+  .pipe(gulp.dest(buildFolder+'/img'))
   .pipe(reload({stream:true}));
 });
 
@@ -82,14 +84,14 @@ gulp.task('watch', function () {
 ===================*/
 const plumberOptions = {
   errorHandler: notify.onError({
-    title: 'Kit, Stylus, or Materialize Error',
+    title: 'Kit or Stylus Error',
     message: '<%= error.message %>'
   })
 };
 const browserSyncOptions = {
   server:{
     baseDir: './',
-    routes: { "/": "dist" }
+    routes: { "/": buildFolder }
   }
 }
 
